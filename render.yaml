@@ -1,0 +1,22 @@
+# render.yaml for Uptime Kuma (Free Tier - Ephemeral Data)
+
+services:
+  - name: uptime-kuma
+    type: web          # Exposed as a web service
+    plan: free         # Use the free instance type
+    env: docker
+    image:
+      url: louislam/uptime-kuma:1 # Use a specific major version tag (e.g., 1) for stability
+    ports:
+      - port: 3001     # Internal port Uptime Kuma listens on
+        protocol: TCP
+    healthCheck:
+      path: /          # Basic check on the root path
+      initialDelaySeconds: 30
+    # Optional: Add a Persistent Disk (Requires Paid Plan)
+    # To keep your monitor history across restarts/deploys, uncomment
+    # the following lines and ensure your service plan supports disks.
+    # disks:
+    #  - name: uptime-kuma-data
+    #    mountPath: /app/data  # Default data directory for Uptime Kuma
+    #    sizeGB: 1             # Smallest paid disk size
