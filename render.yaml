@@ -1,27 +1,27 @@
 # render.yaml for Uptime Kuma (Free Tier - Ephemeral Data)
 
-services:          # Top-level key defining the list of services
-  - name: uptime-kuma  # Start of the first service definition (list item)
-    # --- Properties of the 'uptime-kuma' service ---
-    type: web          # Service type (required)
-    plan: free         # Instance plan (optional, defaults might apply)
-    env: docker        # Deployment environment (required for Docker images)
-
-    image:             # Image details (required for docker env)
-      url: louislam/uptime-kuma:1 # Specific image URL and tag
-
-    ports:             # Port mapping configuration for 'web' type
-      - port: 3001     # The internal container port Uptime Kuma listens on
-        protocol: TCP  # Protocol Render should expect (usually TCP for web)
-
-    healthCheck:       # Health check configuration
-      path: /          # Path Render should request to check health
-      initialDelaySeconds: 30 # Wait time before first health check
-
-    # --- Optional Persistent Disk (Commented Out) ---
-    # Keep this commented if using the 'free' plan as disks are not free.
-    # Uncomment and ensure 'plan' is 'starter' or higher if persistence is needed.
+services:
+  - name: uptime-kuma # Service name
+    type: web         # Service type: web for HTTP/HTTPS servers
+    plan: free        # Render plan (free tier)
+    env: docker       # Environment type: Deploying a Docker image
+    image:
+      url: louislam/uptime-kuma:1 # Docker image URL and tag
+    ports:
+      - port: 3001        # Internal port Uptime Kuma listens on
+        protocol: TCP     # Protocol (TCP for HTTP)
+    healthCheck:
+      path: /             # Health check endpoint path
+      initialDelaySeconds: 30 # Delay before first health check (seconds)
+    # --- Persistent Disk (Optional - Requires Paid Plan) ---
+    # Uncomment the 'disks' section below if you switch to a paid plan ('starter' or higher)
+    # and need data persistence (e.g., monitor history, settings) across restarts/deploys.
+    # The 'free' plan uses ephemeral storage (data is lost on restart/deploy).
     # disks:
-    #  - name: uptime-kuma-data
-    #    mountPath: /app/data  # Default data directory for Uptime Kuma image
-    #    sizeGB: 1             # Smallest paid disk size is 1 GB
+    #   - name: uptime-kuma-data # Name for the persistent disk
+    #     mountPath: /app/data     # Mount point inside the container (Uptime Kuma's data dir)
+    #     sizeGB: 1                # Disk size (1 GB minimum for paid disks)
+
+
+
+
