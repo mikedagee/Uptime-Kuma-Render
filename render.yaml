@@ -1,22 +1,27 @@
 # render.yaml for Uptime Kuma (Free Tier - Ephemeral Data)
 
-services:
-  - name: uptime-kuma
-    type: web          # Exposed as a web service
-    plan: free         # Use the free instance type
-    env: docker
-    image:
-      url: louislam/uptime-kuma:1 # Use a specific major version tag (e.g., 1) for stability
-    ports:
-      - port: 3001     # Internal port Uptime Kuma listens on
-        protocol: TCP
-    healthCheck:
-      path: /          # Basic check on the root path
-      initialDelaySeconds: 30
-    # Optional: Add a Persistent Disk (Requires Paid Plan)
-    # To keep your monitor history across restarts/deploys, uncomment
-    # the following lines and ensure your service plan supports disks.
+services:          # Top-level key defining the list of services
+  - name: uptime-kuma  # Start of the first service definition (list item)
+    # --- Properties of the 'uptime-kuma' service ---
+    type: web          # Service type (required)
+    plan: free         # Instance plan (optional, defaults might apply)
+    env: docker        # Deployment environment (required for Docker images)
+
+    image:             # Image details (required for docker env)
+      url: louislam/uptime-kuma:1 # Specific image URL and tag
+
+    ports:             # Port mapping configuration for 'web' type
+      - port: 3001     # The internal container port Uptime Kuma listens on
+        protocol: TCP  # Protocol Render should expect (usually TCP for web)
+
+    healthCheck:       # Health check configuration
+      path: /          # Path Render should request to check health
+      initialDelaySeconds: 30 # Wait time before first health check
+
+    # --- Optional Persistent Disk (Commented Out) ---
+    # Keep this commented if using the 'free' plan as disks are not free.
+    # Uncomment and ensure 'plan' is 'starter' or higher if persistence is needed.
     # disks:
     #  - name: uptime-kuma-data
-    #    mountPath: /app/data  # Default data directory for Uptime Kuma
-    #    sizeGB: 1             # Smallest paid disk size
+    #    mountPath: /app/data  # Default data directory for Uptime Kuma image
+    #    sizeGB: 1             # Smallest paid disk size is 1 GB
